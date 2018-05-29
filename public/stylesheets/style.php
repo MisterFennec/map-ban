@@ -657,7 +657,6 @@ ul {
 	margin: 0 auto 0 auto;
 	font-size: 14px;
 	opacity: 0.8;
-	color: black;
 	padding-left: 0
  
 }
