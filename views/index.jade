@@ -1,0 +1,91 @@
+extends layout
+
+block content
+
+  body
+    .content
+      // - HEADER ----------------------------
+      header
+        #logo
+          li
+            a Mister-Gaming
+        nav#main-nav
+          ul
+            li
+              a(href='https://forum.mister-gaming.de/') Forum
+            li
+              a(href='index.php') Home
+            li
+              a(href='Matches.php') Matches
+            li
+              a(href='Teams.php') Teams
+            li
+              a(href='Events.php') Events
+            li
+              a(href='Partner.php') Partner
+      // - HOME ----------------------------
+      section#home
+        hr
+        h1 Mister-Gaming
+        h2 Map Ban
+        <?php echo "mapban"; ?>
+        a.page-scroll(href='#about')
+          img(src='img/Icon/pfeil.png', alt='Pfeil')
+      // - ÜBER UNS ----------------------------
+   section#about
+     h3 Best of Three
+     h4(id="gameMessage").gameMessage
+     div.viewBox
+        div.menu
+          div.playerInfoBox
+                span.playerNameBox
+                    span(id="playerName").basetext
+                span.updateBut
+                    a(id="updateName",href="#about").gameButton ✎
+          div.gameList
+                ul(id='availGames').gameText        
+        div.tictacbox
+            div.row0
+                div(id='row0_0').boxdims
+                 -//img(src="https://steamuserimages-a.akamaihd.net/ugc/933804182311104777/C4390D0148B566954591989CD25E60B0B396BBAE/")
+                div.col2.coldim
+                    div(id='row0_1').colbox
+                    div(id='row0_2').colbox
+            div.row1
+                div(id='row1_0').boxdims
+                div.col2.coldim
+                    div(id='row1_1').colbox 
+                    div(id='row1_2').colbox
+            div.row2
+                div(id='row2_0').boxdims
+                div.col2.coldim
+                    div(id='row2_1').colbox
+                    div(id='row2_2').colbox
+        hr
+   footer
+        br
+        div(style='text-align:left; float:left;')
+          a
+            p ©2017 Mister-Gaming
+        div(style='text-align:right; float: right;')
+          a(href='Impressum.php')
+            p Impressum
+        #Mitte(;='', style='text-align:center; float: center;')
+          a(href='https://www.youtube.com/channel/UCjKOMwqWnHGpZnBWu5RLyyg/featured')
+            img(src='img/Icon/youtube.png')
+          a(href='https://twitter.com/MisterGamingDE')
+            img(src='img/Icon/twitter.png')
+    -//Smooth Scrolling
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    script.
+      $('a[href^="#"]').on('click', function(event) {
+      var target = $(this.getAttribute('href'));
+      if( target.length ) {
+      event.preventDefault();
+      $('html, body').stop().animate({
+      scrollTop: target.offset().top
+      }, 1000, 'swing');
+      history.pushState("", document.title, window.location.pathname);
+      }
+      });
+
