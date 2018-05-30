@@ -5,7 +5,7 @@
 
 //STATIC Deployment and Game Settings
 
-var GAME_HOST = 'http://mister-gaming.tk/';
+var GAME_HOST = 'c1267902.virtualuser.de';
 var COMPUTER_PACE_MS=100;
 var SHOW_SCORES=false;
 var SIMULATION_RUN=false;
