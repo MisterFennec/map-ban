@@ -9,7 +9,7 @@ var GAME_HOST = '127.0.0.1';
 var COMPUTER_PACE_MS=100;
 var SHOW_SCORES=false;
 var SIMULATION_RUN=false;
-
+var turns = -1
 //Global variables that are necessary for the session.
 var playerIcon="",oppPlayerIcon="",clientId;
 var gameId = "";
@@ -178,7 +178,10 @@ $(document).ready(function () {
                 };
 				for (var i = 0; i < 3; ++i) {
 					for (var r = 0; r < 3; ++r) {
-						$("#row" + i + "_" + r).removeClass("banned");
+						$("#row" + i + "_" + r +"pick").removeClass("show");
+						$("#row" + i + "_" + r +"banned").removeClass("show");
+						$("#row" + i + "_" + r +"decider").removeClass("show");
+						$("#row" + i + "_" + r +"img").removeClass("banned");
 						}
 					}
                 socket.emit('joinGame', joinDetails);
@@ -226,15 +229,6 @@ $(document).ready(function () {
      *
      */
     socket.on('stale_mate', function (data) {
-	    $("#row0_0").removeClass("banned");
-		$("#row0_1").removeClass("banned");
-		$("#row0_2").removeClass("banned");
-		$("#row1_0").removeClass("banned");
-		$("#row1_1").removeClass("banned");
-		$("#row1_2").removeClass("banned");
-		$("#row2_0").removeClass("banned");
-		$("#row2_1").removeClass("banned");
-		$("#row2_2").removeClass("banned");
 		gameParams.stalemates++;
         saveParams();
         updateBoard(data.board, false);
@@ -392,7 +386,6 @@ $(document).ready(function () {
      * @param quad
      */
     function playTurn(row, quad) {
-
         var playerInfo = {"gameId": gameId, "player": clientId, "action": {"row": row, "quad": quad}};
         $("#row" + row + "_" + quad).toggleClass("selecting");
         socket.emit('playTurn', playerInfo);
@@ -520,9 +513,11 @@ Display code
             };
 		for (var i = 0; i < 3; ++i) {
             for (var r = 0; r < 3; ++r) {
-		$("#row" + i + "_" + r).removeClass("banned");
-		$("#row" + i + "_" + r).removeClass("pick");
-		$("#row" + i + "_" + r).removeClass("decider");
+				turns=-1
+				$("#row" + i + "_" + r +"pick").removeClass("show");
+				$("#row" + i + "_" + r +"banned").removeClass("show");
+				$("#row" + i + "_" + r +"decider").removeClass("show");
+				$("#row" + i + "_" + r +"img").removeClass("banned");
 		}
 		}
             socket.emit('requestGame', startDetails);
@@ -536,7 +531,7 @@ Display code
      *
      */
     function updateDisplay(){
-		//$("#row0_0").removeClass("banned");
+		turns=-1
         $("#playerName").empty().append("Team: " + gameParams.userName);
         $("#wins").empty().append(gameParams.wins);
         $("#losses").empty().append(gameParams.losses);
@@ -569,7 +564,8 @@ Display code
      * @param scores
      */
     function updateBoard(game_data, activate,scores) {
-		var turns = 0 //Anzahl der Züge zählen
+						turns=turns+1;
+		//Anzahl der Züge zählen
         var newScores = scoreBoard(game_data,clientId);
 
         for (var i = 0; i < 3; ++i) {
@@ -579,50 +575,97 @@ Display code
 
                 if (game_data[i][r] == 0 && activate) {
 
-                    $(rowindex).empty();
+                //$(rowindex).empty();
+				$(rowindex+"pick").removeClass("show");
+				$(rowindex+"banned").removeClass("show");
+				$(rowindex+"decider").removeClass("show");
+				$(rowindex+"img").removeClass("banned"); 
                    /*  if (SHOW_SCORES) {
                         $(rowindex).append("<span class='scoreText'>"+newScores[i][r]+"/" +scores[i][r] + "</span>");
                     }*/
                     if (!SIMULATION_RUN) {
                         $(rowindex).bind('mouseenter mouseleave', selectionSetup(rowindex));
-                    } 
+
+					} 
 
                     $(rowindex).bind('click', playSetup(i, r));
 
                 } else if (game_data[i][r] == 0 && !activate) {
-                    $(rowindex).empty();
+                    //$(rowindex).empty();
+	 			$(rowindex+"pick").removeClass("show");
+				$(rowindex+"banned").removeClass("show");
+				$(rowindex+"decider").removeClass("show");
+				$(rowindex+"img").removeClass("banned"); 				
                    /*  if (!SIMULATION_RUN&&!SHOW_SCORES) {
                         $(rowindex).append("<span class='scoreText'>"+newScores[i][r]+"/" +scores[i][r] + "</span>");
                     } */
                     $(rowindex).unbind();
                 }
                 else if (game_data[i][r] != 0) {
-                    $(rowindex).unbind();
+					$(rowindex).unbind();
+					
                     if (game_data[i][r] == clientId) {
-						++turns
-                        $(rowindex).empty().append(playerIcon);
-						if (turns<=6){
-							$(rowindex).addClass("banned");
-						}
-						else if (turns>=8){
-							$(rowindex).addClass("pick");
-						}
-						else if (turns=7){
-							$(rowindex).addClass("decider");
-						}
+				
+					switch (true) {
+						case (turns<=6):
+						//alert(rowindex)
+							$(rowindex+"banned").addClass("show");
+							$(rowindex+"img").addClass("banned");
+							break;
+						case (turns==7):
+						//alert(rowindex)
+							if ( $(rowindex+"banned").hasClass('show') ){}
+							else{
+								$(rowindex+"decider").addClass("show")
+								}
+							break;
+						case (turns==8):
+						//alert(rowindex)
+							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"decider").hasClass('show')){}
+							else{
+								$(rowindex+"pick").addClass("show");
+								}
+							break;
+						case (turns==9):
+						//alert(rowindex)
+							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"decider").hasClass('show')){}
+							else{
+								$(rowindex+"pick").addClass("show");
+								}
+							break;
+
+					}						
                     } else {
-						turns++;
-                        $(rowindex).empty().append(oppPlayerIcon);
-						if (turns<=6){
-							$(rowindex).addClass("banned");
-						}
-						else if (turns>=8){
-							$(rowindex).addClass("pick");
-						}
-						else if (turns=7){
-							$(rowindex).addClass("decider");
-						}
-                    }
+ 					switch (true) {
+						case (turns<=6):
+						//alert(rowindex)
+							$(rowindex+"banned").addClass("show");
+							$(rowindex+"img").addClass("banned");
+							break;
+						case (turns==7):
+						//alert(rowindex)
+							if ( $(rowindex+"banned").hasClass('show') ){}
+							else{
+								$(rowindex+"decider").addClass("show")
+								}
+							break;
+						case (turns==8):
+						//alert(rowindex)
+							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"decider").hasClass('show')){}
+							else{
+								$(rowindex+"pick").addClass("show");
+								}
+							break;
+						case (turns==9):
+						//alert(rowindex)
+							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"decider").hasClass('show')){}
+							else{
+								$(rowindex+"pick").addClass("show");
+								}
+							break;
+							
+					}
+					}
                 }
 
 

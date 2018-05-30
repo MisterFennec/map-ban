@@ -1,10 +1,29 @@
+@font-face {
+    font-family: 'Devil Breeze Bold'; /*a name to be used later*/
+    src: url('Devil Breeze Bold.ttf'); /*URL to font*/
+}
 html, body {margin: 0; padding: 0; height: 100%; text-align: center;}
 html, body {margin: 0; padding: 0; height: 100%; text-align: center;}
 section {min-height: 100%; padding: 100px 0;}
 a {text-decoration: none;}
 li{list-style-type: none;}
-h1,h2,h3,h4,h5,a {font-family: 'Roboto', sans-serif; font-weight: 500; text-transform: uppercase;}
+h1,h2,h3,h4,h5,h6,a {font-family: 'Roboto', sans-serif; font-weight: 500; text-transform: uppercase;}
 h3 {margin-bottom: 5px; font-size: 40px;}
+h6 {
+	font-family: 'Devil Breeze Bold', cursive;
+	text-transform: lowercase;
+	margin-bottom: 5px;
+	margin-top: 2px;
+	padding-top: 5px;
+	font-size: 30px;
+	color: white;
+	text-decoration:underline;
+	position: absolute;
+    width: 196px;
+    height: 40px;
+    margin-left: 2px;
+    background-color: #0000009e;
+}
 p {font-family: 'Roboto-Slab', serif;}
 hr {border: 0px;}
  #logo, li, img, .button{transition: all 300ms; -webkit-transition: all 300ms; -moz-transition: 
@@ -138,9 +157,7 @@ background-color: <?php echo $color ?> ;
 }
 
 #about img {
-  width:350px;
-  margin-bottom: 30px;
-}
+ }
 
 #about h3 {
   color: white;
@@ -369,87 +386,71 @@ footer p {
 	
 }
 .banned {
-   	background-size: contain,0 0,0 0,auto 200px !important;
-	background-repeat: no-repeat;
-	
+  filter: grayscale();
 }
-.decider {
-  	background-size:0 0,contain,0 0,auto 200px !important;
-	background-repeat: no-repeat;
-	
-}
-.pick {
-	background-size:0 0,0 0,contain,auto 200px !important;
-	background-repeat: no-repeat;
-	
-}
-.colbox {
-    height:200px;
-    width:200px;
-	
-	}
 
 #row0_0.boxdims {
-	background-image:url("../img/Banned.png"),url("../img/Decider.png"),url("../img/Pick.png"),url("https://steamuserimages-a.akamaihd.net/ugc/933804182311104777/C4390D0148B566954591989CD25E60B0B396BBAE/"); 
-	background-position:,center,center,center,center;
-	background-size:0 0,0 0,0 0,auto 200px;
-	background-repeat: no-repeat;
+
 	}
 #row0_1.colbox {
-   	background-image:url("../img/Banned.png"),url("../img/Decider.png"),url("../img/Pick.png"),url("http://imguol.com/xleague/news/e0/2017/07/23/rainbow-six-siege---mapa-consulado-1500840798297_800x449.jpg");
-	background-position:center,center,center,center;
-	background-size:0 0,0 0,0 0,auto 200px;
-	background-repeat: no-repeat;
+
 	}
 #row0_2.colbox {
-   	background-image:url("../img/Banned.png"),url("../img/Decider.png"),url("../img/Pick.png"),url("http://static9.cdn.ubi.com/resource/en-US/game/rainbow6/siege/R6-game-info-map-bank-08_229700.jpg");
-	background-position:center,center,center,center;
-	background-size:0 0,0 0,0 0,auto 200px;
-	background-repeat: no-repeat;
+
 	 }
 #row1_0.boxdims {
-   	background-image:url("../img/Banned.png"),url("../img/Decider.png"),url("../img/Pick.png"),url("http://static9.cdn.ubi.com/resource/en-US/game/rainbow6/siege/R6-game-info-map-kafe-dostoyevsky-07_229733.jpg");
-	background-position:center,center,center,center;
-	background-size:0 0,0 0,0 0,auto 200px;
-	background-repeat: no-repeat;
+
 	}
 #row1_1.colbox {
-   	background-image:url("../img/Banned.png"),url("../img/Decider.png"),url("../img/Pick.png"),url("https://vignette.wikia.nocookie.net/rainbowsix/images/f/f6/051060.png/revision/latest/zoom-crop/width/320/height/320?cb=20160515171604");
-	background-position:center,center,center,center;
-	background-size:0 0,0 0,0 0,auto 200px;
-	background-repeat: no-repeat;
+
 	}
 #row1_2.colbox {
-   	background-image:url("../img/Banned.png"),url("../img/Decider.png"),url("../img/Pick.png"),url("https://steamuserimages-a.akamaihd.net/ugc/933804182311066499/CFBE8060BA8EA960FA2D090A746204738E547C72/");
-	background-position:center,center,center,center;
-	background-size:0 0,0 0,0 0,auto 200px;
-	background-repeat: no-repeat;
+
 	}
 #row2_0.boxdims {
-   	background-image:url("../img/Banned.png"),url("../img/Decider.png"),url("../img/Pick.png"),url("http://static9.cdn.ubi.com/resource/en-US/game/rainbow6/siege/R6-game-info-map-oregon-14_229739.jpg");
-	background-position:center,center,center,center;
-	background-size:0 0,0 0,0 0,auto 200px;
-	background-repeat: no-repeat;
+
 	}
 #row2_1.colbox {
-   	background-image:url("../img/Banned.png"),url("../img/Decider.png"),url("../img/Pick.png"),url("http://d1vr6n66ssr06c.cloudfront.net/wp-content/uploads/2016/11/Rainbow-Six-Siege-map.jpg");
-	background-position:center,center,center,center;
-	background-size:0 0,0 0,0 0,auto 200px;
-	background-repeat: no-repeat;
+
 	}
 #row2_2.colbox {
-   	background-image:url("../img/Banned.png"),url("../img/Decider.png"),url("../img/Pick.png"),url("http://static9.cdn.ubi.com/resource/en-US/game/rainbow6/siege/R6-game-info-map-chalet-14_229707.jpg");
-	background-position:center,center,center,center;
-	background-size:0 0,0 0,0 0,auto 200px;
-	background-repeat: no-repeat;
-	}
 
+	}
+.overlay{
+	position: absolute;
+	visibility: hidden;
+}
+.show{
+	visibility: visible;
+}
 .boxdims {
     height:200px;
     width:200px;
 	display:inline;
+	outline: 1px solid #fff;
+    outline-offset: -1px;
+	overflow:hidden;
+}
+.boxdims img {
+    height: 200px;
+    width: 200px;
+}
+.colbox {
+    height:200px;
+    width:200px;
+
 }
 
+.colbox img {
+    height: 200px;
+    width: 200px;  
+}
+.bck {
+	position: absolute;
+    display: block;
+	outline: 2px solid #fff;
+    outline-offset: -2px;
+}
 .playerNameBox {
     width:100%;
 
@@ -657,6 +658,7 @@ ul {
 	margin: 0 auto 0 auto;
 	font-size: 14px;
 	opacity: 0.8;
+	color: black;
 	padding-left: 0
  
 }
@@ -668,14 +670,41 @@ ul {
 .tictacbox {
 
     font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
-
+    outline: 30px solid #000;
     text-align: center;
     height:600px;
     width:600px;
-	margin: 30px auto 80px auto;
+	margin: 50px auto 80px auto;
 
 }
-
+.outline{
+	height: 600px;
+    width: 600px;
+    margin: 50px auto 80px auto;
+	outline: #ffffff 2px solid;
+    z-index: 30;
+}
+.tictacbox:before {
+    content: "";
+    height: 600px;
+    width: 600px;
+    outline: white 14px solid;
+    outline-offset: 8px;
+    display: block;
+    position: absolute;
+    z-index: 10;
+}
+.tictacbox:after {
+    content: "";
+    height: 600px;
+    width: 600px;
+    margin-top: -600;
+    outline: rgb(209, 18, 2) 4px dashed;
+    outline-offset: 13px;
+    display: block;
+    position: absolute;
+    z-index: 20;;
+}
 .row0 {
 
     width:600px;
