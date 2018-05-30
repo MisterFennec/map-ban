@@ -5,7 +5,7 @@
 
 //STATIC Deployment and Game Settings
 
-var GAME_HOST = 'localhost';
+var GAME_HOST = 'http://mister-gaming.tk/';
 var COMPUTER_PACE_MS=100;
 var SHOW_SCORES=false;
 var SIMULATION_RUN=false;
