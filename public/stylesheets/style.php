@@ -692,18 +692,17 @@ ul {
     outline-offset: 8px;
     display: block;
     position: absolute;
-    z-index: 10;
+
 }
-.tictacbox:after {
+.outline:before {
     content: "";
     height: 600px;
     width: 600px;
-    margin-top: -600;
     outline: rgb(209, 18, 2) 4px dashed;
     outline-offset: 13px;
     display: block;
     position: absolute;
-    z-index: 20;;
+
 }
 .row0 {
 
