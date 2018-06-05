@@ -373,7 +373,7 @@ $(document).ready(function () {
      * @returns {Function}
      */
     function playSetup(row, quad) {
-        // alert(selection);
+        alert(selection);
         return function () {
             playTurn(row, quad);
         }
