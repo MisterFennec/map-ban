@@ -584,9 +584,16 @@ Display code
                         $(rowindex).append("<span class='scoreText'>"+newScores[i][r]+"/" +scores[i][r] + "</span>");
                     }*/
                     if (!SIMULATION_RUN) {
-                        $(rowindex).bind( "mouseenter mouseleave", function() {
-			  $( this ).toggleClass( "selecting" );
-			})
+                        $(rowindex).bind({
+			  mouseenter: function() {
+			    // Do something on mouseenter
+			   $(rowindex).AddClass( "selecting" );
+			  },
+			  mouseleave: function() {
+			    // Do something on click
+			   $(rowindex).RemoveClass( "selecting" );
+			  },
+			});
 
 					} 
 
