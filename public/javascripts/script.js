@@ -543,7 +543,7 @@ Display code
     function selectionSetup(selection) {
         // alert(selection);
         return function () {
-            showSelection(selection);
+            //showSelection(selection);
         }
     }
 
