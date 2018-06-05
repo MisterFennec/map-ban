@@ -541,7 +541,7 @@ Display code
 
     //Helper Functions
     function selectionSetup(selection) {
-        alert(selection);
+        //alert(selection);
         return function () {
             showSelection(selection);
         }
@@ -584,7 +584,9 @@ Display code
                         $(rowindex).append("<span class='scoreText'>"+newScores[i][r]+"/" +scores[i][r] + "</span>");
                     }*/
                     if (!SIMULATION_RUN) {
-                        $(rowindex).bind('mouseenter mouseleave', selectionSetup(rowindex));
+                        $(rowindex).bind( "mouseenter mouseleave", function() {
+			  $( this ).toggleClass( "selecting" );
+			})
 
 					} 
 
