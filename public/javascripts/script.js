@@ -387,7 +387,7 @@ $(document).ready(function () {
      */
     function playTurn(row, quad) {
         var playerInfo = {"gameId": gameId, "player": clientId, "action": {"row": row, "quad": quad}};
-        $("#row" + row + "_" + quad).toggleClass("selecting");
+        //$("#row" + row + "_" + quad).toggleClass("selecting");
         socket.emit('playTurn', playerInfo);
 
     }
@@ -543,7 +543,7 @@ Display code
     function selectionSetup(selection) {
         // alert(selection);
         return function () {
-            //showSelection(selection);
+            showSelection(selection);
         }
     }
 
