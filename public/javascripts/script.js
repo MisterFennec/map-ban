@@ -373,7 +373,7 @@ $(document).ready(function () {
      * @returns {Function}
      */
     function playSetup(row, quad) {
-        alert(selection);
+        //alert(selection);
         return function () {
             playTurn(row, quad);
         }
@@ -541,7 +541,7 @@ Display code
 
     //Helper Functions
     function selectionSetup(selection) {
-        // alert(selection);
+        alert(selection);
         return function () {
             showSelection(selection);
         }
