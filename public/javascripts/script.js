@@ -616,21 +616,21 @@ Display code
 						//alert(rowindex)
 							if ( $(rowindex+"banned").hasClass('show') ){}
 							else{
-								$(rowindex+"decider").addClass("show")
+								$(rowindex+"pick").addClass("show")
 								}
 							break;
 						case (turns==8):
 						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"decider").hasClass('show')){}
+							if ( $(rowindex+"banned").hasClass('show') ){}
 							else{
 								$(rowindex+"pick").addClass("show");
 								}
 							break;
 						case (turns==9):
 						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"decider").hasClass('show')){}
+							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"pick").hasClass('show')){}
 							else{
-								$(rowindex+"pick").addClass("show");
+								$(rowindex+"decider").addClass("show");
 								}
 							break;
 
@@ -646,21 +646,21 @@ Display code
 						//alert(rowindex)
 							if ( $(rowindex+"banned").hasClass('show') ){}
 							else{
-								$(rowindex+"decider").addClass("show")
+								$(rowindex+"pick").addClass("show")
 								}
 							break;
 						case (turns==8):
 						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"decider").hasClass('show')){}
+							if ( $(rowindex+"banned").hasClass('show') ){}
 							else{
 								$(rowindex+"pick").addClass("show");
 								}
 							break;
 						case (turns==9):
 						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"decider").hasClass('show')){}
+							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"pick").hasClass('show')){}
 							else{
-								$(rowindex+"pick").addClass("show");
+								$(rowindex+"decider").addClass("show");
 								}
 							break;
 							
