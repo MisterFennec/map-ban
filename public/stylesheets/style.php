@@ -1,3 +1,7 @@
+@font-face {	
+    font-family: 'Devil Breeze Bold'; /*a name to be used later*/	
+    src: url('Devil Breeze Bold.ttf'); /*URL to font*/	
+}
 html, body {margin: 0; padding: 0; height: 100%; text-align: center;}
 html, body {margin: 0; padding: 0; height: 100%; text-align: center;}
 section {min-height: 100%; padding: 100px 0;}
@@ -6,10 +10,12 @@ li{list-style-type: none;}
 h1,h2,h3,h4,h5,h6,a {font-family: 'Roboto', sans-serif; font-weight: 500; text-transform: uppercase;}
 h3 {margin-bottom: 5px; font-size: 40px;}
 h6 {
-	font-family: 'Pacifico', cursive;
-	text-transform: none;
+	font-family: 'Devil Breeze Bold', cursive;
+	text-transform: lowercase;
 	margin-bottom: 5px;
-	font-size: 22px;
+	margin-top: 2px;
+	padding-top: 5px;
+	font-size: 30px;
 	color: white;
 	text-decoration:underline;
 	margin-top: 2px;
@@ -673,12 +679,38 @@ ul {
 .tictacbox {
 
     font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
-    outline: 6px solid #fff;
+    outline: 30px solid #000;
     text-align: center;
     height:600px;
     width:600px;
-	margin: 30px auto 80px auto;
+	margin: 50px auto 80px auto;
+}
 
+.outline {
+	height: 600px;
+    width: 600px;
+    margin: 50px auto 80px auto;
+	outline: #ffffff 2px solid;
+    z-index: 30;
+}
+
+.tictacbox:before {
+    content: "";
+    height: 600px;
+    width: 600px;
+    outline: white 14px solid;
+    outline-offset: 8px;
+    display: block;
+    position: absolute;
+}
+.outline:before {
+    content: "";
+    height: 600px;
+    width: 600px;
+    outline: rgb(209, 18, 2) 4px dashed;
+    outline-offset: 13px;
+    display: block;
+   position: absolute;
 }
 
 .row0 {
