@@ -1,11 +1,10 @@
 /* Author: Joshua Remy
  Script to support the Tic Tac Toe Client side.
-
  */
 
 //STATIC Deployment and Game Settings
 
-var GAME_HOST = 'http://c1267902.virtualuser.de';
+var GAME_HOST = '127.00.1';
 var COMPUTER_PACE_MS=100;
 var SHOW_SCORES=false;
 var SIMULATION_RUN=false;
@@ -182,6 +181,9 @@ $(document).ready(function () {
 						$("#row" + i + "_" + r +"banned").removeClass("show");
 						$("#row" + i + "_" + r +"decider").removeClass("show");
 						$("#row" + i + "_" + r +"img").removeClass("banned");
+						$("#row" + i + "_" + r +"img").css("background-color","");
+						$("#row" + i + "_" + r +"bck").removeClass("fade");
+						$("#row" + i + "_" + r ).addClass("empty");
 						}
 					}
                 socket.emit('joinGame', joinDetails);
@@ -323,7 +325,6 @@ $(document).ready(function () {
 
 
 /*         $('#swapIcons').bind("click", function() {
-
             if (playerIcon=="X".trim()) {
                 playerIcon="O";
                 oppPlayerIcon="X";
@@ -514,10 +515,13 @@ Display code
 		for (var i = 0; i < 3; ++i) {
             for (var r = 0; r < 3; ++r) {
 				turns=-1
-				$("#row" + i + "_" + r +"pick").removeClass("show");
-				$("#row" + i + "_" + r +"banned").removeClass("show");
-				$("#row" + i + "_" + r +"decider").removeClass("show");
-				$("#row" + i + "_" + r +"img").removeClass("banned");
+						$("#row" + i + "_" + r +"pick").removeClass("show");
+						$("#row" + i + "_" + r +"banned").removeClass("show");
+						$("#row" + i + "_" + r +"decider").removeClass("show");
+						$("#row" + i + "_" + r +"img").removeClass("banned");
+						$("#row" + i + "_" + r +"img").css("background-color","");
+						$("#row" + i + "_" + r +"bck").removeClass("fade");
+						$("#row" + i + "_" + r ).addClass("empty");
 		}
 		}
             socket.emit('requestGame', startDetails);
@@ -579,24 +583,23 @@ Display code
 				$(rowindex+"pick").removeClass("show");
 				$(rowindex+"banned").removeClass("show");
 				$(rowindex+"decider").removeClass("show");
-				$(rowindex+"img").removeClass("banned"); 
+				$(rowindex+"img").removeClass("banned");
+				$(rowindex +"img").css("background-color","");
+				$(rowindex +"bck").removeClass("fade");
+				$(rowindex).addClass("empty");				
                    /*  if (SHOW_SCORES) {
                         $(rowindex).append("<span class='scoreText'>"+newScores[i][r]+"/" +scores[i][r] + "</span>");
                     }*/
                     if (!SIMULATION_RUN) {
-                        $(rowindex).bind({
-			  mouseenter: function() {
-			    // Do something on mouseenter
-			   $(rowindex).AddClass( "selecting" );
-			  },
-			  mouseleave: function() {
-			    // Do something on click
-			   $(rowindex).RemoveClass( "selecting" );
-			  },
-			});
+                        $(rowindex).hover(
+					  function() {
+						$( this ).addClass( "selecting" );
+					  }, function() {
+						$( this ).removeClass( "selecting" );
+					  }
+					);
 
 					} 
-
                     $(rowindex).bind('click', playSetup(i, r));
 
                 } else if (game_data[i][r] == 0 && !activate) {
@@ -604,76 +607,83 @@ Display code
 	 			$(rowindex+"pick").removeClass("show");
 				$(rowindex+"banned").removeClass("show");
 				$(rowindex+"decider").removeClass("show");
-				$(rowindex+"img").removeClass("banned"); 				
+				$(rowindex+"img").removeClass("banned");
+				$(rowindex +"img").css("background-color","");
+				$(rowindex +"bck").removeClass("fade");	 
+				$(rowindex).addClass("empty");				
                    /*  if (!SIMULATION_RUN&&!SHOW_SCORES) {
                         $(rowindex).append("<span class='scoreText'>"+newScores[i][r]+"/" +scores[i][r] + "</span>");
                     } */
                     $(rowindex).unbind();
                 }
                 else if (game_data[i][r] != 0) {
+					//var degrees = Math.floor(Math.random() * (10 - (-80))) + -80;
 					$(rowindex).unbind();
 					
                     if (game_data[i][r] == clientId) {
-				
+					$( rowindex ).removeClass( "selecting" );
 					switch (true) {
 						case (turns<=6):
 						//alert(rowindex)
 							$(rowindex+"banned").addClass("show");
 							$(rowindex+"img").addClass("banned");
+							$(rowindex).removeClass("empty");
+							//alert($(".empty")[0].id);
+/* 							if($(rowindex+"banned").css('transform') == 'none'){
+							$(rowindex+"banned").css('transform', 'rotate('+ degrees +'deg)');
+							} */
 							break;
 						case (turns==7):
 						//alert(rowindex)
 							if ( $(rowindex+"banned").hasClass('show') ){}
 							else{
 								$(rowindex+"pick").addClass("show")
+								$(rowindex).removeClass("empty");
 								}
 							break;
 						case (turns==8):
 						//alert(rowindex)
 							if ( $(rowindex+"banned").hasClass('show') ){}
 							else{
+								$(rowindex).removeClass("empty");
 								$(rowindex+"pick").addClass("show");
+								var rest = $(".empty")[1].id+"decider";
+								$("#"+rest).addClass("show");
 								}
 							break;
-						case (turns==9):
-						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"pick").hasClass('show')){}
-							else{
-								$(rowindex+"decider").addClass("show");
-								}
-							break;
-
-					}						
+					}
+						$(rowindex+"img").css('backgroundColor', '#0900ff57');
+						$(rowindex+"bck").addClass("fade");						
                     } else {
  					switch (true) {
 						case (turns<=6):
 						//alert(rowindex)
 							$(rowindex+"banned").addClass("show");
 							$(rowindex+"img").addClass("banned");
+							$(rowindex).removeClass("empty");
 							break;
 						case (turns==7):
 						//alert(rowindex)
 							if ( $(rowindex+"banned").hasClass('show') ){}
 							else{
 								$(rowindex+"pick").addClass("show")
+								$(rowindex).removeClass("empty");
 								}
 							break;
 						case (turns==8):
 						//alert(rowindex)
 							if ( $(rowindex+"banned").hasClass('show') ){}
 							else{
+								$(rowindex).removeClass("empty");
 								$(rowindex+"pick").addClass("show");
-								}
-							break;
-						case (turns==9):
-						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"pick").hasClass('show')){}
-							else{
-								$(rowindex+"decider").addClass("show");
+								var rest = $(".empty")[1].id+"decider";
+								$("#"+rest).addClass("show");
 								}
 							break;
 							
 					}
+					$(rowindex+"img").css('backgroundColor', '#bd13138a');
+					$(rowindex+"bck").addClass("fade");	
 					}
                 }
 
