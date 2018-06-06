@@ -647,7 +647,7 @@ Display code
 							else{
 								$(rowindex).removeClass("empty");
 								$(rowindex+"pick").addClass("show");
-								var rest = $(".empty")[1].id+"decider";
+								var rest = $(".empty")[0].id+"decider";
 								$("#"+rest).addClass("show");
 								}
 							break;
@@ -676,7 +676,7 @@ Display code
 							else{
 								$(rowindex).removeClass("empty");
 								$(rowindex+"pick").addClass("show");
-								var rest = $(".empty")[1].id+"decider";
+								var rest = $(".empty")[0].id+"decider";
 								$("#"+rest).addClass("show");
 								}
 							break;
