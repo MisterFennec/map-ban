@@ -177,13 +177,11 @@ $(document).ready(function () {
                 };
 				for (var i = 0; i < 3; ++i) {
 					for (var r = 0; r < 3; ++r) {
-						$("#row" + i + "_" + r +"pick").removeClass("show");
-						$("#row" + i + "_" + r +"banned").removeClass("show");
-						$("#row" + i + "_" + r +"decider").removeClass("show");
-						$("#row" + i + "_" + r +"img").removeClass("banned");
-						$("#row" + i + "_" + r +"img").css("background-color","");
-						$("#row" + i + "_" + r +"bck").removeClass("fade");
-						$("#row" + i + "_" + r ).addClass("empty");
+						$("#row" + i + "_" + r +"pick").css('visibility', '');
+						$("#row" + i + "_" + r +"banned").css('visibility', '');
+						$("#row" + i + "_" + r +"decider").css('visibility', '');
+						$("#row" + i + "_" + r).css('color','');
+						$("#row" + i + "_" + r).css('backgroundColor', '');	
 						}
 					}
                 socket.emit('joinGame', joinDetails);
@@ -388,7 +386,7 @@ $(document).ready(function () {
      */
     function playTurn(row, quad) {
         var playerInfo = {"gameId": gameId, "player": clientId, "action": {"row": row, "quad": quad}};
-        //$("#row" + row + "_" + quad).toggleClass("selecting");
+        $("#row" + row + "_" + quad).removeClass("empty");
         socket.emit('playTurn', playerInfo);
 
     }
@@ -515,13 +513,11 @@ Display code
 		for (var i = 0; i < 3; ++i) {
             for (var r = 0; r < 3; ++r) {
 				turns=-1
-						$("#row" + i + "_" + r +"pick").removeClass("show");
-						$("#row" + i + "_" + r +"banned").removeClass("show");
-						$("#row" + i + "_" + r +"decider").removeClass("show");
-						$("#row" + i + "_" + r +"img").removeClass("banned");
-						$("#row" + i + "_" + r +"img").css("background-color","");
-						$("#row" + i + "_" + r +"bck").removeClass("fade");
-						$("#row" + i + "_" + r ).addClass("empty");
+						$("#row" + i + "_" + r +"pick").css('visibility', '');
+						$("#row" + i + "_" + r +"banned").css('visibility', '');
+						$("#row" + i + "_" + r +"decider").css('visibility', '');
+						$("#row" + i + "_" + r).css('color','');
+						$("#row" + i + "_" + r).css('backgroundColor', '');	
 		}
 		}
             socket.emit('requestGame', startDetails);
@@ -567,26 +563,57 @@ Display code
      * @param activate
      * @param scores
      */
+		/**Benachrichtigung*/
+	function notifyMe(map) {
+	  // Let's check if the browser supports notifications
+	  if (!("Notification" in window)) {
+		alert("This browser does not support desktop notification");
+	  }
+	  
+	  // Let's check whether notification permissions have alredy been granted
+	  else if (Notification.permission === "granted") {
+		// If it's okay let's create a notification
+		var options = {
+			body: "Dein Gegner hat "+map+" gebannt!",
+			icon: "http://mister-gaming.de/img/MG.png"
+		}
+		var notification = new Notification("Du bist dran!", options);
+	  }
+
+	  // Otherwise, we need to ask the user for permission
+	  else if (Notification.permission !== 'denied') {
+		Notification.requestPermission(function (permission) {
+		  // If the user accepts, let's create a notification
+		  if (permission === "granted") {
+			//var notification = new Notification("Du bist dran!");
+		  }
+		});
+	  }
+
+	  // At last, if the user has denied notifications, and you 
+	  // want to be respectful there is no need to bother them any more.
+	}
     function updateBoard(game_data, activate,scores) {
 						turns=turns+1;
-		//Anzahl der Züge zählen
+						var lastban = [];
+						var p = 0;
+						var l = 0;
+						 //alert(turns);
+						 //Anzahl der Züge zählen
         var newScores = scoreBoard(game_data,clientId);
 
         for (var i = 0; i < 3; ++i) {
 
             for (var r = 0; r < 3; ++r) {
                 var rowindex = "#row" + i + "_" + r;
-
-                if (game_data[i][r] == 0 && activate) {
-
+				if (game_data[i][r] == 0 && activate) {
+				//alert(rowindex);
                 //$(rowindex).empty();
-				$(rowindex+"pick").removeClass("show");
-				$(rowindex+"banned").removeClass("show");
-				$(rowindex+"decider").removeClass("show");
-				$(rowindex+"img").removeClass("banned");
-				$(rowindex +"img").css("background-color","");
-				$(rowindex +"bck").removeClass("fade");
-				$(rowindex).addClass("empty");				
+					$(rowindex+"banned").css('visibility', '');
+					$(rowindex+"pick").css('visibility', '');
+					$(rowindex+"decider").css('visibility', '');
+					$(rowindex).css('color','');
+					$(rowindex).css('backgroundColor', '');	
                    /*  if (SHOW_SCORES) {
                         $(rowindex).append("<span class='scoreText'>"+newScores[i][r]+"/" +scores[i][r] + "</span>");
                     }*/
@@ -604,13 +631,11 @@ Display code
 
                 } else if (game_data[i][r] == 0 && !activate) {
                     //$(rowindex).empty();
-	 			$(rowindex+"pick").removeClass("show");
-				$(rowindex+"banned").removeClass("show");
-				$(rowindex+"decider").removeClass("show");
-				$(rowindex+"img").removeClass("banned");
-				$(rowindex +"img").css("background-color","");
-				$(rowindex +"bck").removeClass("fade");	 
-				$(rowindex).addClass("empty");				
+					$(rowindex+"banned").css('visibility', '');
+					$(rowindex+"pick").css('visibility', '');
+					$(rowindex+"decider").css('visibility', '');
+					$(rowindex).css('color','');
+					$(rowindex).css('backgroundColor', '');
                    /*  if (!SIMULATION_RUN&&!SHOW_SCORES) {
                         $(rowindex).append("<span class='scoreText'>"+newScores[i][r]+"/" +scores[i][r] + "</span>");
                     } */
@@ -619,78 +644,58 @@ Display code
                 else if (game_data[i][r] != 0) {
 					//var degrees = Math.floor(Math.random() * (10 - (-80))) + -80;
 					$(rowindex).unbind();
-					
-                    if (game_data[i][r] == clientId) {
-					$( rowindex ).removeClass( "selecting" );
+					//alert(rowindex);
+					var rest = ""
 					switch (true) {
 						case (turns<=6):
 						//alert(rowindex)
-							$(rowindex+"banned").addClass("show");
-							$(rowindex+"img").addClass("banned");
-							$(rowindex).removeClass("empty");
-							//alert($(".empty")[0].id);
-/* 							if($(rowindex+"banned").css('transform') == 'none'){
-							$(rowindex+"banned").css('transform', 'rotate('+ degrees +'deg)');
-							} */
+							$(rowindex+"banned").css('visibility', 'visible');
 							break;
 						case (turns==7):
 						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') ){}
-							else{
-								$(rowindex+"pick").addClass("show")
-								$(rowindex).removeClass("empty");
+							if ( $(rowindex+"banned").css('visibility') == 'hidden'){
+								$(rowindex+"pick").css('visibility', 'visible');
+								$(rowindex).css('color','#52bf14');
 								}
 							break;
 						case (turns==8):
 						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') ){}
-							else{
-								$(rowindex).removeClass("empty");
-								$(rowindex+"pick").addClass("show");
-								var rest = $(".empty")[0].id+"decider";
-								$("#"+rest).addClass("show");
+							if ( $(rowindex+"banned").css('visibility') == 'hidden' &&  $(rowindex+"pick").css('visibility') == 'hidden'){
+								$(rowindex+"pick").css('visibility', 'visible');
+								$(rowindex).css('color','#52bf14');
+								for (var m = 0; m < 3; ++m) {
+									for (var n = 0; n < 3; ++n) {
+										var indexall = "#row" + m + "_" + n;
+									//alert(indexall);
+										if ( $(indexall+"banned").css('visibility') == 'hidden' &&  $(indexall+"pick").css('visibility') == 'hidden'){
+										console.log(indexall);
+										$(indexall).css('backgroundColor', '#ffd90040');
+										$(indexall+"decider").css('visibility', 'visible');
+										$(indexall).css('color','#dc710e');
+										//$(indexall+"bck").addClass("fade");
+										}
+									}
 								}
+							}
 							break;
 					}
-						$(rowindex+"img").css('backgroundColor', '#0900ff57');
-						$(rowindex+"bck").addClass("fade");						
+                    if (game_data[i][r] == clientId) {
+					$( rowindex ).removeClass( "selecting" );
+					$(rowindex).css('backgroundColor', '#0900ff57');
+					p=0;						
                     } else {
- 					switch (true) {
-						case (turns<=6):
-						//alert(rowindex)
-							$(rowindex+"banned").addClass("show");
-							$(rowindex+"img").addClass("banned");
-							$(rowindex).removeClass("empty");
-							break;
-						case (turns==7):
-						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') ){}
-							else{
-								$(rowindex+"pick").addClass("show")
-								$(rowindex).removeClass("empty");
-								}
-							break;
-						case (turns==8):
-						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') ){}
-							else{
-								$(rowindex).removeClass("empty");
-								$(rowindex+"pick").addClass("show");
-								var rest = $(".empty")[0].id+"decider";
-								$("#"+rest).addClass("show");
-								}
-							break;
-							
-					}
-					$(rowindex+"img").css('backgroundColor', '#bd13138a');
-					$(rowindex+"bck").addClass("fade");	
+					$(rowindex).css('backgroundColor', '#bd13138a');								
+					lastban = $(rowindex);
+					p=1;						
 					}
                 }
 
 
             }
-
-        }
+		}
+		if (p==1) {
+			notifyMe($(lastban).text())}
+			
     }
 
 });
