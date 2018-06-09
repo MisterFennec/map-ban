@@ -16,7 +16,7 @@ h6 {
 	margin-top: 2px;
 	padding-top: 5px;
 	font-size: 30px;
-	color: white;
+	color: inherit;
 	text-decoration:underline;
 	margin-top: 2px;
     position: absolute;
@@ -434,10 +434,8 @@ footer p {
 .boxdims {
     height:200px;
     width:200px;
-	display:inline;
-	outline: 1px solid #fff;
-    outline-offset: -1px;
 	overflow:hidden;
+	color:white;	
 }
 .boxdims img {
     height: 200px;
@@ -446,7 +444,8 @@ footer p {
 .colbox {
     height:200px;
     width:200px;
-
+	overflow:hidden;
+	color:white;
 }
 
 .colbox img {
@@ -459,6 +458,12 @@ footer p {
 	outline: 2px solid #fff;
     outline-offset: -2px;
 	filter: grayscale(0);
+	background: inherit;
+}
+.bckimg{
+	height: 200px;
+    width: 200px;  
+	mix-blend-mode: color-burn;
 }
 .playerNameBox {
     width:100%;
