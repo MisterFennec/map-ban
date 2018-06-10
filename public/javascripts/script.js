@@ -1,15 +1,19 @@
 /* Author: Joshua Remy
  Script to support the Tic Tac Toe Client side.
-
  */
 
 //STATIC Deployment and Game Settings
 
-var GAME_HOST = 'http://c1267902.virtualuser.de';
+var GAME_HOST = 'c1267902.virtualuser.de';
 var COMPUTER_PACE_MS=100;
 var SHOW_SCORES=false;
 var SIMULATION_RUN=false;
-var turns = -1
+var turns = -1;
+var rowsleft = "";
+var lastban = "";
+var parameter = "";
+var banned = [];
+var window_focus;
 //Global variables that are necessary for the session.
 var playerIcon="",oppPlayerIcon="",clientId;
 var gameId = "";
@@ -72,15 +76,14 @@ $(document).ready(function () {
     socket.on('turn_played', function (game) {
 
         if (game.currentPlayer.id == clientId) {
-            updateBoard(game.board, true,game.aiscore);
-            $('#gameMessage').empty().append('Du bist dran!');
+			updateBoard(game.board, true,game.aiscore);
+			$('#gameMessage').empty().append('Du bist dran!');
             if (game.currentPlayer.computerai) {
                 setTimeout(function() {aiTurnPlay(game);},COMPUTER_PACE_MS);
             }
         } else {
             updateBoard(game.board, false,game.aiscore);
             $('#gameMessage').empty().append('Warte auf anderes Team!');
-
         }
 
     });
@@ -119,7 +122,7 @@ $(document).ready(function () {
                 if (players[i].state!="playing") {
                     addOpenGame(players[i]);
                 } else {
-                    $("#player_" + players[i].id).replaceWith('Game ' + players[i].state + ' for ' + players[i].playerName);
+                    //$("#player_" + players[i].id).replaceWith('Game ' + players[i].state + ' for ' + players[i].playerName);
                 }
             }
         }
@@ -172,16 +175,17 @@ $(document).ready(function () {
 
             var req_id = game.id;
             $("#player_" + game.playerX.id).empty().append('Du wurdest von Team ' + game.playerX.playerName + ' eingeladen | <button id="' + req_id + '" >Beitreten</button>');
-            $('#' + req_id).bind('click', function () {
+			$('#' + req_id).bind('click', function () {
                 var joinDetails = {
                     gameId: game.id
                 };
 				for (var i = 0; i < 3; ++i) {
 					for (var r = 0; r < 3; ++r) {
-						$("#row" + i + "_" + r +"pick").removeClass("show");
-						$("#row" + i + "_" + r +"banned").removeClass("show");
-						$("#row" + i + "_" + r +"decider").removeClass("show");
-						$("#row" + i + "_" + r +"img").removeClass("banned");
+						$("#row" + i + "_" + r +"pick").css('visibility', '');
+						$("#row" + i + "_" + r +"banned").css('visibility', '');
+						$("#row" + i + "_" + r +"decider").css('visibility', '');
+						$("#row" + i + "_" + r).css('color','');
+						$("#row" + i + "_" + r).css('backgroundColor', '');	
 						}
 					}
                 socket.emit('joinGame', joinDetails);
@@ -323,7 +327,6 @@ $(document).ready(function () {
 
 
 /*         $('#swapIcons').bind("click", function() {
-
             if (playerIcon=="X".trim()) {
                 playerIcon="O";
                 oppPlayerIcon="X";
@@ -373,7 +376,7 @@ $(document).ready(function () {
      * @returns {Function}
      */
     function playSetup(row, quad) {
-        // alert(selection);
+        //alert(selection);
         return function () {
             playTurn(row, quad);
         }
@@ -387,7 +390,6 @@ $(document).ready(function () {
      */
     function playTurn(row, quad) {
         var playerInfo = {"gameId": gameId, "player": clientId, "action": {"row": row, "quad": quad}};
-        //$("#row" + row + "_" + quad).toggleClass("selecting");
         socket.emit('playTurn', playerInfo);
 
     }
@@ -513,11 +515,11 @@ Display code
             };
 		for (var i = 0; i < 3; ++i) {
             for (var r = 0; r < 3; ++r) {
-				turns=-1
-				$("#row" + i + "_" + r +"pick").removeClass("show");
-				$("#row" + i + "_" + r +"banned").removeClass("show");
-				$("#row" + i + "_" + r +"decider").removeClass("show");
-				$("#row" + i + "_" + r +"img").removeClass("banned");
+						$("#row" + i + "_" + r +"pick").css('visibility', '');
+						$("#row" + i + "_" + r +"banned").css('visibility', '');
+						$("#row" + i + "_" + r +"decider").css('visibility', '');
+						$("#row" + i + "_" + r).css('color','');
+						$("#row" + i + "_" + r).css('backgroundColor', '');	
 		}
 		}
             socket.emit('requestGame', startDetails);
@@ -532,6 +534,7 @@ Display code
      */
     function updateDisplay(){
 		turns=-1
+		rowsleft = "#row0_0#row0_1#row0_2#row1_0#row1_1#row1_2#row2_0#row2_1#row2_2";
         $("#playerName").empty().append("Team: " + gameParams.userName);
         $("#wins").empty().append(gameParams.wins);
         $("#losses").empty().append(gameParams.losses);
@@ -541,7 +544,7 @@ Display code
 
     //Helper Functions
     function selectionSetup(selection) {
-        // alert(selection);
+        //alert(selection);
         return function () {
             showSelection(selection);
         }
@@ -563,115 +566,124 @@ Display code
      * @param activate
      * @param scores
      */
+		/**Benachrichtigung*/
+	function notifyMe(map,status) {
+	  // Let's check if the browser supports notifications
+	  if (!("Notification" in window)) {
+		alert("This browser does not support desktop notification");
+	  }
+	  
+	  // Let's check whether notification permissions have alredy been granted
+	  else if (Notification.permission === "granted") {
+		// If it's okay let's create a notification
+		var options = {
+			body: "Dass Gegnerteam hat "+map+status+"!",
+			icon: "http://mister-gaming.de/img/MG.png"
+		}
+		var notification = new Notification("Du bist dran!", options);
+	  }
+
+	  // Otherwise, we need to ask the user for permission
+	  else if (Notification.permission !== 'denied') {
+		Notification.requestPermission(function (permission) {
+		  // If the user accepts, let's create a notification
+		  if (permission === "granted") {
+			//var notification = new Notification("Du bist dran!");
+		  }
+		});
+	  }
+
+	  // At last, if the user has denied notifications, and you 
+	  // want to be respectful there is no need to bother them any more.
+	}
     function updateBoard(game_data, activate,scores) {
 						turns=turns+1;
-		//Anzahl der Züge zählen
+						 //alert(turns);
+						 //Anzahl der Züge zählen
         var newScores = scoreBoard(game_data,clientId);
 
         for (var i = 0; i < 3; ++i) {
 
             for (var r = 0; r < 3; ++r) {
                 var rowindex = "#row" + i + "_" + r;
-
-                if (game_data[i][r] == 0 && activate) {
-
+				if (game_data[i][r] == 0 && activate) {
+				//alert(rowindex);
                 //$(rowindex).empty();
-				$(rowindex+"pick").removeClass("show");
-				$(rowindex+"banned").removeClass("show");
-				$(rowindex+"decider").removeClass("show");
-				$(rowindex+"img").removeClass("banned"); 
-                   /*  if (SHOW_SCORES) {
+			       /*  if (SHOW_SCORES) {
                         $(rowindex).append("<span class='scoreText'>"+newScores[i][r]+"/" +scores[i][r] + "</span>");
                     }*/
                     if (!SIMULATION_RUN) {
-                        $(rowindex).bind('mouseenter mouseleave', selectionSetup(rowindex));
+                        $(rowindex).hover(
+					  function() {
+						$( this ).addClass( "selecting" );
+					  }, function() {
+						$( this ).removeClass( "selecting" );
+					  }
+					);
 
 					} 
-
                     $(rowindex).bind('click', playSetup(i, r));
 
                 } else if (game_data[i][r] == 0 && !activate) {
                     //$(rowindex).empty();
-	 			$(rowindex+"pick").removeClass("show");
-				$(rowindex+"banned").removeClass("show");
-				$(rowindex+"decider").removeClass("show");
-				$(rowindex+"img").removeClass("banned"); 				
                    /*  if (!SIMULATION_RUN&&!SHOW_SCORES) {
                         $(rowindex).append("<span class='scoreText'>"+newScores[i][r]+"/" +scores[i][r] + "</span>");
                     } */
                     $(rowindex).unbind();
                 }
                 else if (game_data[i][r] != 0) {
+					//var degrees = Math.floor(Math.random() * (10 - (-80))) + -80;
 					$(rowindex).unbind();
-					
-                    if (game_data[i][r] == clientId) {
-				
+					//alert(rowindex);
+					rowsleft = rowsleft.replace(rowindex,'')
+										
 					switch (true) {
 						case (turns<=6):
 						//alert(rowindex)
-							$(rowindex+"banned").addClass("show");
-							$(rowindex+"img").addClass("banned");
+							$(rowindex+"banned").css('visibility', 'visible');
 							break;
 						case (turns==7):
 						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') ){}
-							else{
-								$(rowindex+"pick").addClass("show")
+							if ( $(rowindex+"banned").css('visibility') == 'hidden'){
+								$(rowindex+"pick").css('visibility', 'visible');
+								$(rowindex).css('color','#52bf14');
 								}
 							break;
 						case (turns==8):
 						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') ){}
-							else{
-								$(rowindex+"pick").addClass("show");
-								}
+							if ( $(rowindex+"banned").css('visibility') == 'hidden' &&  $(rowindex+"pick").css('visibility') == 'hidden'){
+								$(rowindex+"pick").css('visibility', 'visible');
+								$(rowindex).css('color','#52bf14');
+								$(rowsleft).css('backgroundColor', '#ffd90040');
+								$(rowsleft+"decider").css('visibility', 'visible');
+								$(rowsleft).css('color','#dc710e');
+								
+							}
 							break;
-						case (turns==9):
-						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"pick").hasClass('show')){}
-							else{
-								$(rowindex+"decider").addClass("show");
-								}
-							break;
-
-					}						
+					}
+                    if (game_data[i][r] == clientId) {
+					$( rowindex ).removeClass( "selecting" );
+					$(rowindex).css('backgroundColor', '#0900ff57');
+											
                     } else {
- 					switch (true) {
-						case (turns<=6):
-						//alert(rowindex)
-							$(rowindex+"banned").addClass("show");
-							$(rowindex+"img").addClass("banned");
-							break;
-						case (turns==7):
-						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') ){}
-							else{
-								$(rowindex+"pick").addClass("show")
-								}
-							break;
-						case (turns==8):
-						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') ){}
-							else{
-								$(rowindex+"pick").addClass("show");
-								}
-							break;
-						case (turns==9):
-						//alert(rowindex)
-							if ( $(rowindex+"banned").hasClass('show') || $(rowindex+"pick").hasClass('show')){}
-							else{
-								$(rowindex+"decider").addClass("show");
-								}
-							break;
-							
+					$(rowindex).css('backgroundColor', '#bd13138a');
+					if (!banned.includes($(rowindex).text())){
+						banned.push($(rowindex).text());
+						lastban = banned[banned.length - 1];
+						if (turns>6){parameter=" gewählt"}
+						else{parameter=" gebannt"}
+						$(window).focus(function() {
+							window_focus = true;
+						}).blur(function() {
+							window_focus = false;
+						});
+						if (!window_focus){notifyMe(lastban,parameter)};
+						//notifyMe(lastban,parameter);
 					}
 					}
                 }
-
-
             }
-
-        }
+		}		
     }
 
 });

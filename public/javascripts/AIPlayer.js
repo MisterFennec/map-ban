@@ -94,4 +94,4 @@ function score(adj,end,player_id){
 }
 
 //for Node support
-module.exports.scoreBoard = scoreBoard;
+//module.exports.scoreBoard = scoreBoard;

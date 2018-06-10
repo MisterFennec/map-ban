@@ -37,7 +37,7 @@ var ai = require("./public/javascripts/AIPlayer.js");
 var io = require('socket.io')(http);
 var gameRegistrar=new Array();
 var players=new Array();
-
+var count=0;
 /*
  Setup pSocket IO Connection
  - All message listeners are defined in this function.
@@ -209,8 +209,9 @@ io.on('connection', function(socket){
 
     //On Disconnect, we remove the Player and Games they are registered in...
     socket.on('disconnect', function(){
-
+		
         var playerDelete;
+		count=0;
         cleanGameByPlayer(socket.id);
         for (var i=0;i<players.length;++i) {
             if (players[i].id==socket.id) {
@@ -284,7 +285,7 @@ function computerMove(gamePlaying,delay) {
     if (gamePlaying.isStalemate()) {
 
         io.in(gamePlaying.playerX.id).emit('stale_mate',gamePlaying);
-        io.in(gamePlaying.playerX.id).emit('game_message',{message:"Map Ban beendet!"});
+        //io.in(gamePlaying.playerX.id).emit('game_message',{message:"Map Ban beendet!"});
         getGame(gamePlaying.id).endGame();
     } else if (gamePlaying.isWinner()) {
 
@@ -526,7 +527,7 @@ Game.prototype.isWinner = function() {
 };
 
 Game.prototype.completeTurn  = function(player,location) {
-
+	count++;
     if (this.currentPlayer===player&&player===this.playerX) {
         this.board[location[0]][location[1]]=this.playerX.id;
         this.currentPlayer=this.playerO;
@@ -565,15 +566,11 @@ function gameDone(board) {
 
 
     //Check StaleMate
-    var mate=true;
-    for (var i=0;i<3;i++) {
-
-        for (var q=0;q<3;q++) {
-            if (board[i][q]==0) mate=false;
-        }
-
-    }
+    var mate=false;
+    if (count==8) mate=true;
+	console.log(count);
     if (mate) {
+		count=0;
         return {result:"stalemate"};
     }
 
